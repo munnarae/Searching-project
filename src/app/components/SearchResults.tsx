@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 const SearchResults: React.FC<{ searchTerm: string, results: any[], showMore: boolean, hasMore: boolean, handleShowMore: () => void, loader: React.RefObject<HTMLDivElement> }> = ({ searchTerm, results, showMore, hasMore, handleShowMore, loader }) => {
-    const [selectedTab, setSelectedTab] = useState<string>('전체');
+
     const renderResults = () => {
         return (
             <div className="space-y-4">
@@ -24,8 +24,6 @@ const SearchResults: React.FC<{ searchTerm: string, results: any[], showMore: bo
                 {['전체', '업체', '업체소식'].map(tab => (
                     <button
                         key={tab}
-                        onClick={() => setSelectedTab(tab)}
-                        className={`p-2 ${selectedTab === tab ? 'border-b-2 border-black w-36' : 'border-b-2 border-transparent w-36'}`}
                     >
                         {tab}
                     </button>
