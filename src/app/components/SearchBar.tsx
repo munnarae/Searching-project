@@ -3,17 +3,27 @@ import { CiCircleRemove } from 'react-icons/ci';
 import { MdOutlineClear } from 'react-icons/md';
 import { IoIosArrowBack } from 'react-icons/io';
 import { suggestionsList } from '@/app/data/companyData';
+import { useDebounce } from '@/app/hooks/useDebounce';
+
 
 const SearchBar: React.FC<{ onSearch: (term: string) => void, onReset: () => void }> = ({ onSearch, onReset }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [recentSearches, setRecentSearches] = useState<string[]>([]);
     const [suggestions, setSuggestions] = useState<string[]>(suggestionsList);
     const [hideSuggestions, setHideSuggestions] = useState(false);
+    const debouncedSearchTerm = useDebounce(searchTerm, 500);
+
 
     useEffect(() => {
         const storedSearches = JSON.parse(localStorage.getItem('recentSearches') || '[]');
         setRecentSearches(storedSearches);
     }, []);
+
+    useEffect(() => {
+        if (debouncedSearchTerm) {
+            onSearch(debouncedSearchTerm);
+        }
+    }, [debouncedSearchTerm]);
 
 
     const addRecentSearch = (term: string) => {
