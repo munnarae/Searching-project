@@ -39,6 +39,16 @@ const SearchBar: React.FC<{ onSearch: (term: string) => void, onReset: () => voi
         setHideSuggestions(true);
     };
 
+    // 검색어 입력란을 초기화합니다.
+    const clearSearchTerm = () => setSearchTerm('');
+
+    // 엔터 키를 눌렀을 때 검색어를 처리합니다.
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter' && searchTerm.trim() !== '') {
+            handleSearch(searchTerm);
+            setSearchTerm('');
+        }
+    };
 
     const handleDeleteRecent = (term: string) => {
         const updatedSearches = recentSearches.filter(search => search !== term);
@@ -61,6 +71,7 @@ const SearchBar: React.FC<{ onSearch: (term: string) => void, onReset: () => voi
                     {searchTerm && (
                         <CiCircleRemove
                             className="absolute right-2 top-3 cursor-pointer"
+                            onClick={clearSearchTerm}
                             size={20}
                         />
                     )}
