@@ -51,10 +51,15 @@ const SearchBar: React.FC<{ onSearch: (term: string) => void, onReset: () => voi
         }
     };
 
+    const showSuggestions = () => {
+        setHideSuggestions(false);
+        onReset();
+    };
+
     return (
         <div className="p-4">
             <div className="flex items-center space-x-2">
-                <IoIosArrowBack className="cursor-pointer" size={24} />
+                <IoIosArrowBack className="cursor-pointer" size={24} onClick={showSuggestions} />
                 <div className="relative flex-1">
                     <input
                         type="text"
