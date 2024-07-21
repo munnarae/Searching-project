@@ -32,12 +32,21 @@ const SearchBar: React.FC<{ onSearch: (term: string) => void, onReset: () => voi
         localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
     };
 
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter' && searchTerm.trim() !== '') {
+            handleSearch(searchTerm);
+            setSearchTerm('');
+        }
+    };
+
     const handleSearch = (term: string) => {
         setSearchTerm(term);
         addRecentSearch(term);
         onSearch(term);
         setHideSuggestions(true);
     };
+
+
 
     // 검색어 입력란을 초기화합니다.
     const clearSearchTerm = () => setSearchTerm('');
@@ -65,6 +74,7 @@ const SearchBar: React.FC<{ onSearch: (term: string) => void, onReset: () => voi
                         type="text"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
+                        onKeyDown={handleKeyDown}
                         className="w-full p-2 border border-gray-300 rounded bg-gray-100 placeholder-black focus:outline-none focus:border-gray-100 focus:ring-1 focus:ring-gray-500"
                         placeholder="검색어를 입력해 주세요"
                     />
