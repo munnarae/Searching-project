@@ -48,6 +48,8 @@ const SearchBar: React.FC<{ onSearch: (term: string) => void, onReset: () => voi
 
 
 
+
+
     // 검색어 입력란을 초기화합니다.
     const clearSearchTerm = () => setSearchTerm('');
 
