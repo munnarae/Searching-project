@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { CiCircleRemove } from 'react-icons/ci';
 import { MdOutlineClear } from 'react-icons/md';
 import { IoIosArrowBack } from 'react-icons/io';
-import { suggestionsList } from '@/app/data/companyData';
 import { useDebounce } from '@/app/hooks/useDebounce';
-
+import { suggestionsList } from '@/app/data/companyData';
 
 const SearchBar: React.FC<{ onSearch: (term: string) => void, onReset: () => void }> = ({ onSearch, onReset }) => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -12,7 +11,6 @@ const SearchBar: React.FC<{ onSearch: (term: string) => void, onReset: () => voi
     const [suggestions, setSuggestions] = useState<string[]>(suggestionsList);
     const [hideSuggestions, setHideSuggestions] = useState(false);
     const debouncedSearchTerm = useDebounce(searchTerm, 500);
-
 
     useEffect(() => {
         const storedSearches = JSON.parse(localStorage.getItem('recentSearches') || '[]');
@@ -25,18 +23,10 @@ const SearchBar: React.FC<{ onSearch: (term: string) => void, onReset: () => voi
         }
     }, [debouncedSearchTerm]);
 
-
     const addRecentSearch = (term: string) => {
         const updatedSearches = [term, ...recentSearches.filter(search => search !== term)].slice(0, 10);
         setRecentSearches(updatedSearches);
         localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
-    };
-
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter' && searchTerm.trim() !== '') {
-            handleSearch(searchTerm);
-            setSearchTerm('');
-        }
     };
 
     const handleSearch = (term: string) => {
@@ -46,25 +36,19 @@ const SearchBar: React.FC<{ onSearch: (term: string) => void, onReset: () => voi
         setHideSuggestions(true);
     };
 
+    const handleDeleteRecent = (term: string) => {
+        const updatedSearches = recentSearches.filter(search => search !== term);
+        setRecentSearches(updatedSearches);
+        localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
+    };
 
-
-
-
-    // 검색어 입력란을 초기화합니다.
     const clearSearchTerm = () => setSearchTerm('');
 
-    // 엔터 키를 눌렀을 때 검색어를 처리합니다.
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter' && searchTerm.trim() !== '') {
             handleSearch(searchTerm);
             setSearchTerm('');
         }
-    };
-
-    const handleDeleteRecent = (term: string) => {
-        const updatedSearches = recentSearches.filter(search => search !== term);
-        setRecentSearches(updatedSearches);
-        localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
     };
 
     return (
