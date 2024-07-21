@@ -12,23 +12,27 @@ const SearchBar: React.FC<{ onSearch: (term: string) => void, onReset: () => voi
     const [hideSuggestions, setHideSuggestions] = useState(false);
     const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
+    // 컴포넌트가 처음 렌더링될 때 로컬 스토리지에서 최근 검색어를 가져옵니다.
     useEffect(() => {
         const storedSearches = JSON.parse(localStorage.getItem('recentSearches') || '[]');
         setRecentSearches(storedSearches);
     }, []);
 
+    // 검색어가 디바운스된 후 onSearch 콜백을 호출합니다.
     useEffect(() => {
         if (debouncedSearchTerm) {
             onSearch(debouncedSearchTerm);
         }
     }, [debouncedSearchTerm]);
 
+    // 최근 검색어를 업데이트하고 로컬 스토리지에 저장합니다.
     const addRecentSearch = (term: string) => {
         const updatedSearches = [term, ...recentSearches.filter(search => search !== term)].slice(0, 10);
         setRecentSearches(updatedSearches);
         localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
     };
 
+    // 검색어를 처리하고 최근 검색어에 추가하며 검색 제안을 숨깁니다.
     const handleSearch = (term: string) => {
         setSearchTerm(term);
         addRecentSearch(term);
@@ -36,14 +40,17 @@ const SearchBar: React.FC<{ onSearch: (term: string) => void, onReset: () => voi
         setHideSuggestions(true);
     };
 
+    // 특정 최근 검색어를 삭제합니다.
     const handleDeleteRecent = (term: string) => {
         const updatedSearches = recentSearches.filter(search => search !== term);
         setRecentSearches(updatedSearches);
         localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
     };
 
+    // 검색어 입력란을 초기화합니다.
     const clearSearchTerm = () => setSearchTerm('');
 
+    // 엔터 키를 눌렀을 때 검색어를 처리합니다.
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter' && searchTerm.trim() !== '') {
             handleSearch(searchTerm);
@@ -51,6 +58,7 @@ const SearchBar: React.FC<{ onSearch: (term: string) => void, onReset: () => voi
         }
     };
 
+    // 뒤로가기 아이콘 클릭 시 검색 제안과 최근 검색어를 다시 표시합니다.
     const showSuggestions = () => {
         setHideSuggestions(false);
         onReset();

@@ -1,5 +1,5 @@
+// pages/index.tsx
 'use client'; // 클라이언트 측에 렌더링이 되도록 클라이언트 컴포넌트로 우회.
-
 import React from 'react';
 import SearchBar from "@/app/components/SearchBar";
 import SearchResults from "@/app/components/SearchResults";
